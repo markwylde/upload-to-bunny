@@ -1,6 +1,6 @@
 # Upload-to-Bunny
 
-Upload-to-Bunny is a powerful Node.js library designed to simplify and speed up the process of uploading directories to BunnyCDN storage. With built-in support for parallel uploads and deleting old files, this library makes it easy to keep your BunnyCDN storage up-to-date.
+Upload-to-Bunny is a Node.JS library designed to simplify and speed up the process of uploading directories to BunnyCDN storage. With built-in support for parallel uploads and deleting old files, this library makes it easy to keep your BunnyCDN storage up-to-date.
 
 ## Features
 
