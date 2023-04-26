@@ -1,6 +1,6 @@
 {
   "name": "upload-to-bunny",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "description": "Upload-to-Bunny is a Node.JS library designed to simplify and speed up the process of uploading directories to BunnyCDN storage.",
   "main": "lib/index.js",
@@ -16,7 +16,11 @@
     "test": "node tests/index.js"
   },
   "keywords": [
-    "bunny", "bunny.net", "upload", "cdn", "static"
+    "bunny",
+    "bunny.net",
+    "upload",
+    "cdn",
+    "static"
   ],
   "author": "Mark Wylde <me@markwylde.com> (https://github.com/markwylde)",
   "license": "MIT",
