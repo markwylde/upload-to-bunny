@@ -1,6 +1,6 @@
 {
   "name": "upload-to-bunny",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "description": "Upload-to-Bunny is a Node.JS library designed to simplify and speed up the process of uploading directories to BunnyCDN storage.",
   "main": "lib/index.js",
