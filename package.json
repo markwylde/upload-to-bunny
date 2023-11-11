@@ -25,11 +25,11 @@
   "author": "Mark Wylde <me@markwylde.com> (https://github.com/markwylde)",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.4.0",
-    "globby": "^13.2.2",
-    "p-limit": "^4.0.0"
+    "axios": "^1.6.1",
+    "globby": "^14.0.0",
+    "p-limit": "^5.0.0"
   },
   "devDependencies": {
-    "basictap": "^4.3.4"
+    "basictap": "^4.3.5"
   }
 }
