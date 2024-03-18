@@ -25,8 +25,8 @@
   "author": "Mark Wylde <me@markwylde.com> (https://github.com/markwylde)",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.6.5",
-    "globby": "^14.0.0",
+    "axios": "^1.6.8",
+    "globby": "^14.0.1",
     "p-limit": "^5.0.0"
   },
   "devDependencies": {
