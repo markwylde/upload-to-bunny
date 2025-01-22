@@ -7,7 +7,7 @@ import { deleteFile, uploadFile, uploadDirectory } from '../lib/index.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const STORAGE_ZONE_NAME = process.env.STORAGE_ZONE_NAME;
-const ACCESS_KEY = process.env.ACCESS_KEY;
+const ACCESS_KEY = process.env.ACCESS_KEY
 
 test('deleteFile should delete a file from Bunny CDN', async (t) => {
   t.plan(1);
@@ -15,13 +15,14 @@ test('deleteFile should delete a file from Bunny CDN', async (t) => {
   const options = {
     storageZoneName: STORAGE_ZONE_NAME,
     accessKey: ACCESS_KEY,
+    region: 'ny'
   };
 
   const targetDirectory = 'test-delete-file';
 
   // First, create a file to delete
   await axios.put(
-    `https://storage.bunnycdn.com/${options.storageZoneName}/${targetDirectory}`,
+    `https://${options.region ? options.region + "." : ""}storage.bunnycdn.com/${options.storageZoneName}/${targetDirectory}`,
     'test content',
     {
       headers: {
@@ -36,7 +37,7 @@ test('deleteFile should delete a file from Bunny CDN', async (t) => {
 
   // Try to fetch the deleted file
   try {
-    await axios.get(`https://storage.bunnycdn.com/${options.storageZoneName}/${targetDirectory}`, {
+    await axios.get(`https://${options.region ? options.region + "." : ""}storage.bunnycdn.com/${options.storageZoneName}/${targetDirectory}`, {
       headers: {
         'AccessKey': options.accessKey,
       },
@@ -52,6 +53,7 @@ test('uploadFile should upload a file to Bunny CDN', async (t) => {
   const options = {
     storageZoneName: STORAGE_ZONE_NAME,
     accessKey: ACCESS_KEY,
+    region: 'ny'
   };
 
   const sourcePath = path.join(__dirname, 'uploadDir', 'test.txt');
@@ -59,13 +61,13 @@ test('uploadFile should upload a file to Bunny CDN', async (t) => {
 
   await uploadFile(sourcePath, targetPath, options);
 
-  const response = await axios.get(`https://storage.bunnycdn.com/${options.storageZoneName}/${targetPath}`, {
+  const response = await axios.get(`https://${options.region ? options.region + "." : ""}storage.bunnycdn.com/${options.storageZoneName}/${targetPath}`, {
     headers: {
       'AccessKey': options.accessKey,
     },
   });
 
-  t.equal(response.data, 'Test file content\n', 'File content should match');
+  t.equal(response.data, 'Test file content\r\n', 'File content should match');
 });
 
 test('uploadDirectory should upload a directory to Bunny CDN', async (t) => {
@@ -75,6 +77,7 @@ test('uploadDirectory should upload a directory to Bunny CDN', async (t) => {
     storageZoneName: STORAGE_ZONE_NAME,
     accessKey: ACCESS_KEY,
     cleanDestination: true,
+    region: 'ny'
   };
 
   const sourceDirectory = path.join(__dirname, 'uploadDir');
@@ -82,7 +85,7 @@ test('uploadDirectory should upload a directory to Bunny CDN', async (t) => {
 
   await uploadDirectory(sourceDirectory, targetDirectory, options);
 
-  const response1 = await axios.get(`https://storage.bunnycdn.com/${options.storageZoneName}/${targetDirectory}/test.txt`, {
+  const response1 = await axios.get(`https://${options.region ? options.region + "." : ""}storage.bunnycdn.com/${options.storageZoneName}/${targetDirectory}/test.txt`, {
     headers: {
       'AccessKey': options.accessKey,
     },

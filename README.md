@@ -32,7 +32,8 @@ await uploadToBunny('/path/to/local/directory', '', {
   storageZoneName: 'your-storage-zone-name',
   cleanDestination: true,
   accessKey: 'your-bunny-access-key',
-  maxConcurrentUploads: 10
+  maxConcurrentUploads: 10,
+  region: 'ny'  
 });
 ```
 
@@ -54,7 +55,8 @@ await uploadToBunny('/path/to/local/directory', '', {
   storageZoneName: 'test-storage-12345',
   cleanDestination: true,
   accessKey: 'xxxxxxxxxx-xxxx-xxxx-xxxx',
-  maxConcurrentUploads: 10
+  maxConcurrentUploads: 10,
+  region: 'uk'  
 });
 ```
 
