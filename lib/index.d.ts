@@ -5,6 +5,7 @@ export interface BunnyUploaderOptions {
   accessKey: string;
   cleanDestination?: boolean;
   maxConcurrentUploads?: number;
+  region?: string; // none for DE
   limit?: (fn: () => Promise<void>) => Promise<void>;
 }
 
