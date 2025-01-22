@@ -8,6 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const STORAGE_ZONE_NAME = process.env.STORAGE_ZONE_NAME;
 const ACCESS_KEY = process.env.ACCESS_KEY
+const STORAGE_REGION = process.env.STORAGE_REGION;
 
 test('deleteFile should delete a file from Bunny CDN', async (t) => {
   t.plan(1);
@@ -15,7 +16,7 @@ test('deleteFile should delete a file from Bunny CDN', async (t) => {
   const options = {
     storageZoneName: STORAGE_ZONE_NAME,
     accessKey: ACCESS_KEY,
-    region: 'ny'
+    region: STORAGE_REGION
   };
 
   const targetDirectory = 'test-delete-file';
@@ -53,7 +54,7 @@ test('uploadFile should upload a file to Bunny CDN', async (t) => {
   const options = {
     storageZoneName: STORAGE_ZONE_NAME,
     accessKey: ACCESS_KEY,
-    region: 'ny'
+    region: STORAGE_REGION
   };
 
   const sourcePath = path.join(__dirname, 'uploadDir', 'test.txt');
@@ -67,7 +68,7 @@ test('uploadFile should upload a file to Bunny CDN', async (t) => {
     },
   });
 
-  t.equal(response.data, 'Test file content\r\n', 'File content should match');
+  t.equal(response.data, 'Test file content\n', 'File content should match');
 });
 
 test('uploadDirectory should upload a directory to Bunny CDN', async (t) => {
@@ -77,7 +78,7 @@ test('uploadDirectory should upload a directory to Bunny CDN', async (t) => {
     storageZoneName: STORAGE_ZONE_NAME,
     accessKey: ACCESS_KEY,
     cleanDestination: true,
-    region: 'ny'
+    region: STORAGE_REGION
   };
 
   const sourceDirectory = path.join(__dirname, 'uploadDir');
