@@ -2,7 +2,7 @@ import test from 'basictap';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import axios from 'axios';
-import { deleteFile, uploadFile, uploadDirectory } from '../lib/index.js';
+import { deleteFile, uploadFile, uploadDirectory } from '../src/index.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
