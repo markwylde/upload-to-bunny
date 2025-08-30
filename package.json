@@ -13,6 +13,8 @@
     "url": "git+https://github.com/markwylde/upload-to-bunny.git"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build",
     "test": "node tests/index.js"
   },
   "keywords": [
@@ -25,11 +27,13 @@
   "author": "Mark Wylde <me@markwylde.com> (https://github.com/markwylde)",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.7.7",
-    "globby": "^14.0.2",
-    "p-limit": "^6.1.0"
+    "axios": "^1.11.0",
+    "globby": "^14.1.0",
+    "p-limit": "^7.1.1"
   },
   "devDependencies": {
-    "basictap": "^4.3.5"
+    "@types/node": "^22.5.0",
+    "basictap": "^4.3.5",
+    "typescript": "^5.6.2"
   }
 }
