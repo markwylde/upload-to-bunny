@@ -1,6 +1,6 @@
 {
   "name": "upload-to-bunny",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "type": "module",
   "description": "Upload-to-Bunny is a Node.JS library designed to simplify and speed up the process of uploading directories to BunnyCDN storage.",
   "main": "lib/index.js",
@@ -15,7 +15,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "prepublishOnly": "npm run build",
-    "test": "tsx tests/index.js"
+    "test": "node --test --loader tsx tests/index.js",
+    "lint": "biome lint src tests",
+    "format": "biome format --write src tests",
+    "tidy": "npm run lint && npm run format"
   },
   "keywords": [
     "bunny",
@@ -27,13 +30,12 @@
   "author": "Mark Wylde <me@markwylde.com> (https://github.com/markwylde)",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.11.0",
     "globby": "^14.1.0",
     "p-limit": "^7.1.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.2.2",
     "@types/node": "^22.5.0",
-    "basictap": "^4.3.5",
     "tsx": "^4.20.5",
     "typescript": "^5.6.2"
   }
