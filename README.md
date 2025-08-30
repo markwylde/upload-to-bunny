@@ -1,12 +1,12 @@
 # Upload-to-Bunny
 
-Upload-to-Bunny is a Node.JS library designed to simplify and speed up the process of uploading directories to BunnyCDN storage. With built-in support for parallel uploads and deleting old files, this library makes it easy to keep your BunnyCDN storage up-to-date.
+Upload-to-Bunny is a Node.JS library designed to simplify and speed up the process of uploading directories to BunnyCDN storage. With built-in support for parallel uploads and cleaning old files (with two strategies), this library makes it easy to keep your BunnyCDN storage up-to-date.
 
 ## Features
 
 - Upload entire directories to BunnyCDN storage
 - Parallel uploads for faster transfers
-- Option to clean the destination before uploading
+- Option to clean the destination before uploading ("simple" or "avoid-deletes")
 - Easily configurable with storage zone and access key
 
 ## Installation
@@ -30,10 +30,11 @@ import uploadToBunny from 'upload-to-bunny';
 
 await uploadToBunny('/path/to/local/directory', '', {
   storageZoneName: 'your-storage-zone-name',
-  cleanDestination: true,
+  // Choose how to clean the destination (see Options below)
+  cleanDestination: 'avoid-deletes',
   accessKey: 'your-bunny-access-key',
   maxConcurrentUploads: 10,
-  region: 'ny'  
+  region: 'ny'
 });
 ```
 
@@ -42,7 +43,9 @@ await uploadToBunny('/path/to/local/directory', '', {
 The `uploadToBunny` function accepts the following options:
 
 - `storageZoneName` (string, required): The name of your BunnyCDN storage zone.
-- `cleanDestination` (boolean, optional): If set to `true`, the target directory will be cleaned before uploading. Default is `false`.
+- `cleanDestination` ("simple" | "avoid-deletes", optional): How to clean the destination before uploading. If omitted, no cleaning occurs.
+  - `"simple"`: Deletes the target directory first, then uploads everything. Fastest, but Bunny can misbehave if a file is deleted and then immediately re-uploaded to the same path.
+  - `"avoid-deletes"`: Recursively prunes only remote files/folders not present locally and keeps files that are about to be replaced. This works around Bunny's delete-then-reupload issue.
 - `accessKey` (string, required): Your BunnyCDN access key.
 - `maxConcurrentUploads` (number, optional): The maximum number of files to upload concurrently. Default is 10.
 
@@ -51,12 +54,22 @@ The `uploadToBunny` function accepts the following options:
 ```javascript
 import uploadToBunny from 'upload-to-bunny';
 
+// Example using the "simple" strategy
 await uploadToBunny('/path/to/local/directory', '', {
   storageZoneName: 'test-storage-12345',
-  cleanDestination: true,
+  cleanDestination: 'simple',
   accessKey: 'xxxxxxxxxx-xxxx-xxxx-xxxx',
   maxConcurrentUploads: 10,
-  region: 'uk'  
+  region: 'uk'
+});
+
+// Example using the "avoid-deletes" strategy (recommended to avoid Bunny delete/reupload issues)
+await uploadToBunny('/path/to/local/directory', '', {
+  storageZoneName: 'test-storage-12345',
+  cleanDestination: 'avoid-deletes',
+  accessKey: 'xxxxxxxxxx-xxxx-xxxx-xxxx',
+  maxConcurrentUploads: 10,
+  region: 'uk'
 });
 ```
 
