@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "prepublishOnly": "npm run build",
-    "test": "node --test --loader tsx tests/index.js",
+    "test": "tsx tests/index.ts",
     "lint": "biome lint src tests",
     "format": "biome format --write src tests",
     "tidy": "npm run lint && npm run format"
