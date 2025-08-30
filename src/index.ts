@@ -190,7 +190,7 @@ export const uploadFile = async (
 export const uploadDirectory = async (
   sourceDirectory: string,
   targetDirectory: string,
-  options: UploadOptions = {},
+  options: UploadOptions,
 ): Promise<void> => {
   const effective: UploadOptions = {
     maxConcurrentUploads: 10,
@@ -232,4 +232,3 @@ export const uploadDirectory = async (
 };
 
 export default uploadDirectory;
-
