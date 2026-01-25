@@ -66,4 +66,3 @@ await uploadDirectory(source, target, {
 });
 
 console.log("Upload complete.");
-
