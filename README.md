@@ -73,6 +73,16 @@ await uploadToBunny('/path/to/local/directory', '', {
 });
 ```
 
+## CLI
+
+A CLI is also available for quick uploads:
+
+```bash
+npx upload-to-bunny --source ./dist --zone my-zone --key my-key
+```
+
+Run `npx upload-to-bunny --help` for all options. You can also set `BUNNY_STORAGE_ZONE_NAME`, `BUNNY_ACCESS_KEY`, and `BUNNY_STORAGE_REGION` as environment variables.
+
 ## Contributing
 
 Contributions are always welcome! If you have any suggestions, bug reports, or feature requests, feel free to open an issue or submit a pull request.
