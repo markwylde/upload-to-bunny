@@ -18,13 +18,15 @@ npm install --save upload-to-bunny
 
 ## Usage
 
-To use the Upload-to-Bunny library, simply import it and call the `uploadToBunny` function with the appropriate options:
+To use the Upload-to-Bunny library, simply import it and call the `uploadDirectory` function with the appropriate options:
 
 ```javascript
 import uploadDirectory from 'upload-to-bunny';
 
 await uploadDirectory(sourceDirectory, destinationDirectory, options);
 ```
+
+`destinationDirectory` accepts both `''` and `'/'` for the storage root. They are equivalent.
 
 ### Example
 

@@ -262,3 +262,55 @@ test("uploadDirectory should recursively prune remote without deleting replaceme
 	await expect404("a/sub/delete-sub.txt");
 	await expect404("b/old.txt");
 });
+
+test("uploadDirectory treats '' and '/' target roots equivalently", async (_t) => {
+	const sourceDirectory = path.join(__dirname, "uploadDir");
+	const options = {
+		storageZoneName: "zone",
+		accessKey: "key",
+	};
+
+	const originalFetch = globalThis.fetch;
+	const urlsByRoot = {
+		empty: [] as string[],
+		slash: [] as string[],
+	};
+
+	const makeFetch = (bucket: string[]) => {
+		return (async (input: RequestInfo | URL) => {
+			const url =
+				typeof input === "string"
+					? input
+					: input instanceof URL
+						? input.toString()
+						: input.url;
+			bucket.push(url);
+			return {
+				ok: true,
+				status: 200,
+				statusText: "OK",
+				json: async () => [],
+				text: async () => "",
+			} as Response;
+		}) as typeof fetch;
+	};
+
+	try {
+		globalThis.fetch = makeFetch(urlsByRoot.empty);
+		await uploadDirectory(sourceDirectory, "", options);
+
+		globalThis.fetch = makeFetch(urlsByRoot.slash);
+		await uploadDirectory(sourceDirectory, "/", options);
+	} finally {
+		globalThis.fetch = originalFetch;
+	}
+
+	const normalizeRoot = (url: string) => url.replace(/https:\/\/storage\.bunnycdn\.com\/zone\/?/, "");
+	const emptySet = new Set(urlsByRoot.empty.map(normalizeRoot));
+	const slashSet = new Set(urlsByRoot.slash.map(normalizeRoot));
+	assert.deepEqual(
+		[...emptySet].sort(),
+		[...slashSet].sort(),
+		"Network targets should match for '' and '/' roots",
+	);
+});
