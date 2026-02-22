@@ -1,8 +1,8 @@
-import bunnyUploader from './lib/index.js';
+import uploadDirectory from './lib/index.js';
 
-await bunnyUploader('example', '', {
-  storageZoneName: 'test-storage',
-  cleanDestination: true,
+await uploadDirectory('./dist', '/', {
+  storageZoneName: 'your-storage-zone-name',
   accessKey: 'xxxxxxxx-xxxx-xxxx-xxxx',
-  maxConcurrentUploads: 10
+  cleanDestination: 'avoid-deletes',
+  maxConcurrentUploads: 10,
 });

@@ -8,6 +8,7 @@ Upload-to-Bunny is a Node.JS library designed to simplify and speed up the proce
 - Parallel uploads for faster transfers
 - Option to clean the destination before uploading ("simple" or "avoid-deletes")
 - Easily configurable with storage zone and access key
+- CLI for quick one-off uploads
 
 ## Installation
 
@@ -20,57 +21,56 @@ npm install --save upload-to-bunny
 To use the Upload-to-Bunny library, simply import it and call the `uploadToBunny` function with the appropriate options:
 
 ```javascript
-uploadToBunny(sourceDirectory, destinationDirectory, options);
+import uploadDirectory from 'upload-to-bunny';
+
+await uploadDirectory(sourceDirectory, destinationDirectory, options);
 ```
 
 ### Example
 
 ```javascript
-import uploadToBunny from 'upload-to-bunny';
+import uploadDirectory from 'upload-to-bunny';
 
-await uploadToBunny('/path/to/local/directory', '', {
+// Upload ./dist to the storage root, pruning removed files safely
+await uploadDirectory('./dist', '/', {
   storageZoneName: 'your-storage-zone-name',
-  // Choose how to clean the destination (see Options below)
-  cleanDestination: 'avoid-deletes',
   accessKey: 'your-bunny-access-key',
+  cleanDestination: 'avoid-deletes',
   maxConcurrentUploads: 10,
-  region: 'ny'
+  region: 'ny',
 });
 ```
 
 ### Options
 
-The `uploadToBunny` function accepts the following options:
+The `uploadDirectory` function accepts the following options:
 
 - `storageZoneName` (string, required): The name of your BunnyCDN storage zone.
+- `accessKey` (string, required): Your BunnyCDN access key.
+- `region` (string, optional): Storage region prefix (e.g. `ny`, `la`, `sg`, `uk`, `se`, `br`, `jh`, `syd`). If omitted, the default region is used.
 - `cleanDestination` ("simple" | "avoid-deletes", optional): How to clean the destination before uploading. If omitted, no cleaning occurs.
   - `"simple"`: Deletes the target directory first, then uploads everything. Fastest, but Bunny can misbehave if a file is deleted and then immediately re-uploaded to the same path.
   - `"avoid-deletes"`: Recursively prunes only remote files/folders not present locally and keeps files that are about to be replaced. This works around Bunny's delete-then-reupload issue.
-- `accessKey` (string, required): Your BunnyCDN access key.
-- `maxConcurrentUploads` (number, optional): The maximum number of files to upload concurrently. Default is 10.
+- `maxConcurrentUploads` (number, optional): The maximum number of files to upload concurrently. Default is `10`.
+- `limit` (LimitFunction, optional): A custom [p-limit](https://github.com/sindresorhus/p-limit) instance. If provided, `maxConcurrentUploads` is ignored.
 
-### Example
+### Named exports
+
+The package also exports `uploadFile` and `deleteFile` for lower-level operations:
 
 ```javascript
-import uploadToBunny from 'upload-to-bunny';
+import { uploadFile, deleteFile } from 'upload-to-bunny';
 
-// Example using the "simple" strategy
-await uploadToBunny('/path/to/local/directory', '', {
-  storageZoneName: 'test-storage-12345',
-  cleanDestination: 'simple',
-  accessKey: 'xxxxxxxxxx-xxxx-xxxx-xxxx',
-  maxConcurrentUploads: 10,
-  region: 'uk'
-});
+const options = {
+  storageZoneName: 'your-storage-zone-name',
+  accessKey: 'your-bunny-access-key',
+};
 
-// Example using the "avoid-deletes" strategy (recommended to avoid Bunny delete/reupload issues)
-await uploadToBunny('/path/to/local/directory', '', {
-  storageZoneName: 'test-storage-12345',
-  cleanDestination: 'avoid-deletes',
-  accessKey: 'xxxxxxxxxx-xxxx-xxxx-xxxx',
-  maxConcurrentUploads: 10,
-  region: 'uk'
-});
+// Upload a single file
+await uploadFile('./local/file.txt', '/remote/file.txt', options);
+
+// Delete a remote file
+await deleteFile('/remote/old-file.txt', options);
 ```
 
 ## CLI
@@ -81,7 +81,32 @@ A CLI is also available for quick uploads:
 npx upload-to-bunny --source ./dist --zone my-zone --key my-key
 ```
 
-Run `npx upload-to-bunny --help` for all options. You can also set `BUNNY_STORAGE_ZONE_NAME`, `BUNNY_ACCESS_KEY`, and `BUNNY_STORAGE_REGION` as environment variables.
+### CLI Options
+
+| Flag | Description | Default | Env variable |
+|------|-------------|---------|--------------|
+| `--source <path>` | Local directory to upload | `.` (current directory) | |
+| `--target <path>` | Remote directory path | `/` | |
+| `--zone <name>` | Storage zone name (required) | | `BUNNY_STORAGE_ZONE_NAME` |
+| `--key <key>` | Access key (required) | | `BUNNY_ACCESS_KEY` |
+| `--region <region>` | Storage region (e.g. `ny`, `la`, `sg`) | | `BUNNY_STORAGE_REGION` |
+| `--clean <mode>` | `simple` or `avoid-deletes` | `avoid-deletes` | |
+| `--help` | Show help message | | |
+
+### CLI Examples
+
+```bash
+# Upload ./dist using environment variables
+export BUNNY_STORAGE_ZONE_NAME=my-zone
+export BUNNY_ACCESS_KEY=my-key
+npx upload-to-bunny --source ./dist
+
+# Upload to a specific region with simple cleaning
+npx upload-to-bunny --source ./dist --zone my-zone --key my-key --region ny --clean simple
+
+# Upload to a subdirectory on the storage zone
+npx upload-to-bunny --source ./dist --target /app/assets --zone my-zone --key my-key
+```
 
 ## Contributing
 
