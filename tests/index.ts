@@ -1,15 +1,49 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 // Using Node's built-in fetch
 import { deleteFile, uploadFile, uploadDirectory } from "../src/index.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const execFileAsync = promisify(execFile);
 
 const STORAGE_ZONE_NAME = process.env.STORAGE_ZONE_NAME;
 const ACCESS_KEY = process.env.ACCESS_KEY;
 const STORAGE_REGION = process.env.STORAGE_REGION;
+
+test("CLI does not clean the destination unless --clean is provided", async () => {
+	const sourceDirectory = await mkdtemp(
+		path.join(tmpdir(), "upload-to-bunny-cli-"),
+	);
+	const cliPath = path.join(__dirname, "..", "src", "cli.ts");
+
+	try {
+		const { stdout } = await execFileAsync(
+			process.execPath,
+			[
+				"--import",
+				"tsx",
+				cliPath,
+				"--source",
+				sourceDirectory,
+				"--zone",
+				"test-zone",
+				"--key",
+				"test-key",
+			],
+			{ timeout: 5_000 },
+		);
+
+		assert.match(stdout, /Upload complete\./);
+	} finally {
+		await rm(sourceDirectory, { recursive: true, force: true });
+	}
+});
 
 test("deleteFile should delete a file from Bunny CDN", async (_t) => {
 	const options = {

@@ -12,7 +12,7 @@ Options:
   --zone <name>         Storage zone name (required, or via BUNNY_STORAGE_ZONE_NAME env)
   --key <key>           Access key (required, or via BUNNY_ACCESS_KEY env)
   --region <region>     Storage region (optional, e.g., 'ny', 'la', 'sg', or via BUNNY_STORAGE_REGION env)
-  --clean <mode>        Clean destination before uploading (default: avoid-deletes)
+  --clean <mode>        Clean destination before uploading (default: no cleaning)
                         Modes: simple (delete all), avoid-deletes (only upload changes)
   --help                Show this help message
 `;
@@ -24,7 +24,7 @@ const { values } = parseArgs({
 		zone: { type: "string" },
 		key: { type: "string" },
 		region: { type: "string" },
-		clean: { type: "string", default: "avoid-deletes" },
+		clean: { type: "string" },
 		help: { type: "boolean" },
 	},
 });
@@ -51,8 +51,14 @@ if (!accessKey) {
 	process.exit(1);
 }
 
-if (cleanDestination !== "simple" && cleanDestination !== "avoid-deletes") {
-	console.error(`Invalid clean mode "${cleanDestination}". Use "simple" or "avoid-deletes".`);
+if (
+	cleanDestination !== undefined &&
+	cleanDestination !== "simple" &&
+	cleanDestination !== "avoid-deletes"
+) {
+	console.error(
+		`Invalid clean mode "${cleanDestination}". Use "simple" or "avoid-deletes".`,
+	);
 	process.exit(1);
 }
 
