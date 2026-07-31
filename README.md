@@ -92,7 +92,7 @@ npx upload-to-bunny --source ./dist --zone my-zone --key my-key
 | `--zone <name>` | Storage zone name (required) | | `BUNNY_STORAGE_ZONE_NAME` |
 | `--key <key>` | Access key (required) | | `BUNNY_ACCESS_KEY` |
 | `--region <region>` | Storage region (e.g. `ny`, `la`, `sg`) | | `BUNNY_STORAGE_REGION` |
-| `--clean <mode>` | `simple` or `avoid-deletes` | `avoid-deletes` | |
+| `--clean <mode>` | `simple` or `avoid-deletes` | No cleaning | |
 | `--help` | Show help message | | |
 
 ### CLI Examples
