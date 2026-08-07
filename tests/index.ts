@@ -15,6 +15,7 @@ const execFileAsync = promisify(execFile);
 const STORAGE_ZONE_NAME = process.env.STORAGE_ZONE_NAME;
 const ACCESS_KEY = process.env.ACCESS_KEY;
 const STORAGE_REGION = process.env.STORAGE_REGION;
+const HAS_BUNNY_CREDENTIALS = Boolean(STORAGE_ZONE_NAME && ACCESS_KEY);
 
 test("CLI does not clean the destination unless --clean is provided", async () => {
 	const sourceDirectory = await mkdtemp(
@@ -46,6 +47,8 @@ test("CLI does not clean the destination unless --clean is provided", async () =
 });
 
 test("deleteFile should delete a file from Bunny CDN", async (_t) => {
+	if (!HAS_BUNNY_CREDENTIALS) return _t.skip("Bunny credentials unavailable");
+
 	const options = {
 		storageZoneName: STORAGE_ZONE_NAME,
 		accessKey: ACCESS_KEY,
@@ -96,6 +99,8 @@ test("deleteFile should delete a file from Bunny CDN", async (_t) => {
 });
 
 test("uploadFile should upload a file to Bunny CDN", async (_t) => {
+	if (!HAS_BUNNY_CREDENTIALS) return _t.skip("Bunny credentials unavailable");
+
 	const options = {
 		storageZoneName: STORAGE_ZONE_NAME,
 		accessKey: ACCESS_KEY,
@@ -121,6 +126,8 @@ test("uploadFile should upload a file to Bunny CDN", async (_t) => {
 });
 
 test("uploadDirectory should upload a directory to Bunny CDN", async (_t) => {
+	if (!HAS_BUNNY_CREDENTIALS) return _t.skip("Bunny credentials unavailable");
+
 	const options = {
 		storageZoneName: STORAGE_ZONE_NAME,
 		accessKey: ACCESS_KEY,
@@ -159,6 +166,8 @@ test("uploadDirectory should upload a directory to Bunny CDN", async (_t) => {
 });
 
 test("uploadDirectory simple mode uploads successfully", async (_t) => {
+	if (!HAS_BUNNY_CREDENTIALS) return _t.skip("Bunny credentials unavailable");
+
 	const options = {
 		storageZoneName: STORAGE_ZONE_NAME,
 		accessKey: ACCESS_KEY,
@@ -200,6 +209,8 @@ test("uploadDirectory simple mode uploads successfully", async (_t) => {
 });
 
 test("uploadDirectory should recursively prune remote without deleting replacements", async (_t) => {
+	if (!HAS_BUNNY_CREDENTIALS) return _t.skip("Bunny credentials unavailable");
+
 	const options = {
 		storageZoneName: STORAGE_ZONE_NAME,
 		accessKey: ACCESS_KEY,
