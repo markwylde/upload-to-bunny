@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ES2022",
-    "moduleResolution": "Node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "lib",
     "rootDir": "src",
     "declaration": true,
@@ -17,4 +17,3 @@
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "lib", "tests", "**/*.test.ts"]
 }
-
